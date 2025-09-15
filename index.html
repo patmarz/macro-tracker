@@ -4,7 +4,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="theme-color" content="#0b84fe">
+  <meta name="theme-color" content="#10b981">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
@@ -15,28 +15,45 @@
 <body>
   <header class="header">
     <div class="brand">
-      <img src="icons/icon-192.png" alt="icon" width="32" height="32">
-      <div>
-        <h1>Macro Tracker</h1>
-        <div class="version small">Version <span id="ver"></span></div>
+      <div class="brand-left">
+        <img src="icons/icon-192.png" alt="icon" width="32" height="32">
+        <div>
+          <h1>Macro Tracker</h1>
+          <div class="version small">Version <span id="ver"></span></div>
+        </div>
+      </div>
+      <div class="top-controls">
+        <input type="date" id="filterDate" aria-label="Filter by date">
+        <button id="menuBtn" aria-label="Menu">⋯</button>
       </div>
     </div>
-    <div class="toolbar" style="margin-top:10px;">
-      <input type="date" id="filterDate" aria-label="Filter by date">
+
+    <!-- Dropdown menu -->
+    <div class="menu" id="menu" role="menu" aria-label="Actions">
+      <div class="title">Quick Actions</div>
       <button id="undoBtn" class="btn-secondary" disabled>Undo</button>
       <button id="redoBtn" class="btn-secondary" disabled>Redo</button>
+
+      <div class="group"></div>
       <button id="openSettingsBtn" class="btn-ghost">Settings</button>
+
+      <div class="group"></div>
       <button id="exportJsonBtn" class="btn">Export JSON</button>
       <button id="exportCsvBtn" class="btn">Export CSV</button>
       <input type="file" id="fileInput" accept=".json,.csv" class="hidden">
       <button id="importBtn" class="btn-ghost">Import</button>
+
+      <div class="group"></div>
       <button id="savePresetBtn" class="btn-ghost">Save as Preset</button>
       <select id="presetPicker" aria-label="Presets"></select>
+
+      <div class="group"></div>
       <button id="copyYesterdayBtn" class="btn-ghost">Copy Yesterday</button>
     </div>
   </header>
 
   <main class="container">
+    <!-- KPIs first -->
     <section class="card">
       <div class="kpi">
         <div class="item"><div class="label">Calories</div><div class="value" id="kpiCal">0</div></div>
@@ -44,9 +61,10 @@
         <div class="item"><div class="label">Carbs (g)</div><div class="value" id="kpiC">0</div></div>
         <div class="item"><div class="label">Fat (g)</div><div class="value" id="kpiF">0</div></div>
       </div>
-      <div class="hint" style="margin-top:8px">Progress bars fill as you approach targets. Toggle remaining/consumed and change targets in Settings.</div>
+      <div class="hint" style="margin-top:8px">Tap the ⋯ to access actions. Progress bars fill as you approach targets.</div>
     </section>
 
+    <!-- Form -->
     <section class="card">
       <form id="form" class="grid" onsubmit="return false;">
         <div><label>Date</label><input type="date" id="date" required></div>
@@ -77,14 +95,16 @@
           <button id="saveBtn" class="btn" type="submit">Add / Update Meal</button>
         </div>
       </form>
-      <div class="hint">Calories will auto-calc from macros if left empty (4/4/9 kcal per g). A warning shows if macros vs. calories differ a lot.</div>
+      <div class="hint">Calories auto-calc from macros if blank (4/4/9 kcal per g). Mismatch warnings appear in the table.</div>
     </section>
 
+    <!-- Rollups -->
     <section class="card">
       <div class="small" id="roll7">7-day rollup...</div>
       <div class="small" id="roll30" style="margin-top:4px">30-day rollup...</div>
     </section>
 
+    <!-- Table -->
     <section class="card">
       <table>
         <thead>
