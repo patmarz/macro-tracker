@@ -1,183 +1,89 @@
-
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="theme-color" content="#10b981">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="default">
-  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
-  <link rel="manifest" href="manifest.json">
-  <title>Macro Tracker</title>
-  <link rel="stylesheet" href="styles.css">
-</head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#10b981"><meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><link rel="manifest" href="manifest.json">
+<title>Macro Tracker</title><link rel="stylesheet" href="styles.css"></head>
 <body>
-  <header class="header">
-    <div class="brand">
-      <div class="brand-left">
-        <img src="icons/icon-192.png" alt="icon" width="32" height="32">
-        <div>
-          <h1>Macro Tracker</h1>
-          <div class="version small">Version <span id="ver"></span></div>
-        </div>
-      </div>
-      <div class="top-controls">
-        <input type="date" id="filterDate" aria-label="Filter by date">
-        <button id="menuBtn" aria-label="Menu">⋯</button>
-      </div>
+<header class="header">
+  <div class="brand">
+    <div class="brand-left">
+      <img src="icons/icon-192.png" alt="icon" width="32" height="32">
+      <div><h1>Macro Tracker</h1><div class="version small">Version <span id="ver"></span></div></div>
     </div>
-
-    <!-- Dropdown menu -->
-    <div class="menu" id="menu" role="menu" aria-label="Actions">
-      <div class="title">Quick Actions</div>
-      <button id="undoBtn" class="btn-secondary" disabled>Undo</button>
-      <button id="redoBtn" class="btn-secondary" disabled>Redo</button>
-
-      <div class="group"></div>
-      <button id="openSettingsBtn" class="btn-ghost">Settings</button>
-
-      <div class="group"></div>
-      <button id="exportJsonBtn" class="btn">Export JSON</button>
-      <button id="exportCsvBtn" class="btn">Export CSV</button>
-      <input type="file" id="fileInput" accept=".json,.csv" class="hidden">
-      <button id="importBtn" class="btn-ghost">Import</button>
-
-      <div class="group"></div>
-      <button id="savePresetBtn" class="btn-ghost">Save as Preset</button>
-      <select id="presetPicker" aria-label="Presets"></select>
-
-      <div class="group"></div>
-      <button id="copyYesterdayBtn" class="btn-ghost">Copy Yesterday</button>
+    <div class="top-controls">
+      <input type="date" id="filterDate" aria-label="Filter by date">
+      <button id="menuBtn" aria-label="Menu">⋯</button>
     </div>
-  </header>
-
-  <main class="container">
-    <!-- KPIs first -->
-    <section class="card">
-      <div class="kpi">
-        <div class="item"><div class="label">Calories</div><div class="value" id="kpiCal">0</div></div>
-        <div class="item"><div class="label">Protein (g)</div><div class="value" id="kpiP">0</div></div>
-        <div class="item"><div class="label">Carbs (g)</div><div class="value" id="kpiC">0</div></div>
-        <div class="item"><div class="label">Fat (g)</div><div class="value" id="kpiF">0</div></div>
+  </div>
+  <div class="menu" id="menu" role="menu" aria-label="Actions">
+    <div class="title">Quick Actions</div>
+    <button id="undoBtn" class="btn-secondary" disabled>Undo</button>
+    <button id="redoBtn" class="btn-secondary" disabled>Redo</button>
+    <div class="group"></div>
+    <button id="openSettingsBtn" class="btn-ghost">Settings</button>
+    <div class="group"></div>
+    <button id="exportJsonBtn" class="btn">Export JSON</button>
+    <button id="exportCsvBtn" class="btn">Export CSV</button>
+    <input type="file" id="fileInput" accept=".json,.csv" class="hidden">
+    <button id="importBtn" class="btn-ghost">Import</button>
+    <div class="group"></div>
+    <button id="savePresetBtn" class="btn-ghost">Save as Preset</button>
+    <select id="presetPicker" aria-label="Presets"></select>
+    <div class="group"></div>
+    <button id="copyYesterdayBtn" class="btn-ghost">Copy Yesterday</button>
+  </div>
+</header>
+<main class="container">
+  <section class="card">
+    <div class="kpi">
+      <div class="item"><div class="label">Calories</div><div class="value" id="kpiCal">0</div></div>
+      <div class="item"><div class="label">Protein (g)</div><div class="value" id="kpiP">0</div></div>
+      <div class="item"><div class="label">Carbs (g)</div><div class="value" id="kpiC">0</div></div>
+      <div class="item"><div class="label">Fat (g)</div><div class="value" id="kpiF">0</div></div>
+    </div>
+    <div class="hint" style="margin-top:8px">Tap the ⋯ for actions. Progress bars fill as you approach targets.</div>
+  </section>
+  <section class="card">
+    <form id="form" class="grid" onsubmit="return false;">
+      <div><label>Date</label><input type="date" id="date" required></div>
+      <div><label>Meal Name</label><input type="text" id="meal" placeholder="e.g., Chicken bowl" required></div>
+      <div class="row">
+        <div><label>Calories</label><input type="number" id="calories" inputmode="decimal" step="1" min="0" placeholder="kcal"></div>
+        <div><label>Protein (g)</label><input type="number" id="protein" inputmode="decimal" step="0.1" min="0"></div>
       </div>
-      <div class="hint" style="margin-top:8px">Tap the ⋯ to access actions. Progress bars fill as you approach targets.</div>
-    </section>
-
-    <!-- Form -->
-    <section class="card">
-      <form id="form" class="grid" onsubmit="return false;">
-        <div><label>Date</label><input type="date" id="date" required></div>
-        <div><label>Meal Name</label><input type="text" id="meal" placeholder="e.g., Chicken bowl" required></div>
-        <div class="row">
-          <div><label>Calories</label><input type="number" id="calories" inputmode="decimal" step="1" min="0" placeholder="kcal"></div>
-          <div><label>Protein (g)</label><input type="number" id="protein" inputmode="decimal" step="0.1" min="0"></div>
-        </div>
-        <div class="row">
-          <div><label>Carbs (g)</label><input type="number" id="carbs" inputmode="decimal" step="0.1" min="0"></div>
-          <div><label>Fat (g)</label><input type="number" id="fat" inputmode="decimal" step="0.1" min="0"></div>
-        </div>
-        <div class="row">
-          <div>
-            <label>Category</label>
-            <select id="category">
-              <option value="">—</option>
-              <option>Breakfast</option>
-              <option>Lunch</option>
-              <option>Dinner</option>
-              <option>Snack</option>
-            </select>
-          </div>
-          <div><label>Time</label><input type="time" id="time"></div>
-        </div>
-        <div style="grid-column:1/-1;"><label>Notes</label><textarea id="notes" placeholder="Optional notes"></textarea></div>
-        <div style="grid-column:1/-1;display:flex;gap:10px;">
-          <button id="saveBtn" class="btn" type="submit">Add / Update Meal</button>
-        </div>
-      </form>
-      <div class="hint">Calories auto-calc from macros if blank (4/4/9 kcal per g). Mismatch warnings appear in the table.</div>
-    </section>
-
-    <!-- Rollups -->
-    <section class="card">
-      <div class="small" id="roll7">7-day rollup...</div>
-      <div class="small" id="roll30" style="margin-top:4px">30-day rollup...</div>
-    </section>
-
-    <!-- Table -->
-    <section class="card">
-      <table>
-        <thead>
-          <tr>
-            <th>Meal</th><th>Cal</th><th>P</th><th>C</th><th>F</th><th></th>
-          </tr>
-        </thead>
-        <tbody id="tbody"></tbody>
-      </table>
-    </section>
-  </main>
-
-  <footer>
-    <div class="small">Data is stored locally on this device via localStorage.</div>
-    <div class="small">&copy; 2025 Macro Tracker</div>
-  </footer>
-
-  <!-- Settings Modal -->
-  <div class="modal" id="settingsModal" role="dialog" aria-modal="true" aria-label="Settings">
-    <div class="panel">
-      <h3>Settings</h3>
-      <div class="grid">
-        <div><label>Daily Calories Target</label><input id="targetCal" type="number" min="0"></div>
-        <div><label>Protein Target (g)</label><input id="targetP" type="number" min="0"></div>
-        <div><label>Carbs Target (g)</label><input id="targetC" type="number" min="0"></div>
-        <div><label>Fat Target (g)</label><input id="targetF" type="number" min="0"></div>
-        <div>
-          <label>Theme</label>
-          <select id="themeSel">
-            <option value="auto">Auto</option>
-            <option value="light">Light</option>
-            <option value="dark">Dark</option>
+      <div class="row">
+        <div><label>Carbs (g)</label><input type="number" id="carbs" inputmode="decimal" step="0.1" min="0"></div>
+        <div><label>Fat (g)</label><input type="number" id="fat" inputmode="decimal" step="0.1" min="0"></div>
+      </div>
+      <div class="row">
+        <div><label>Category</label>
+          <select id="category">
+            <option value="">—</option><option>Breakfast</option><option>Lunch</option><option>Dinner</option><option>Snack</option>
           </select>
         </div>
-        <div style="display:flex;align-items:center;gap:8px;margin-top:8px">
-          <input id="showRemaining" type="checkbox">
-          <label for="showRemaining">Show remaining instead of consumed</label>
-        </div>
+        <div><label>Time</label><input type="time" id="time"></div>
       </div>
-      <div class="actions">
-        <button class="btn-secondary" id="settingsCancel">Cancel</button>
-        <button class="btn" id="settingsSave">Save</button>
+      <div style="grid-column:1/-1;display:flex;gap:10px;">
+        <button id="saveBtn" class="btn" type="submit">Add / Update Meal</button>
       </div>
-    </div>
-  </div>
-
-  <!-- Import Preview Modal -->
-  <div class="modal" id="importModal" role="dialog" aria-modal="true" aria-label="Import Preview">
-    <div class="panel">
-      <h3>Import Preview</h3>
-      <div id="importSummary" class="small"></div>
-      <div class="small" style="margin-top:8px">Sample rows:</div>
-      <ul id="importSample" class="small"></ul>
-      <div style="margin-top:10px">
-        <label>Merge Strategy</label>
-        <select id="mergeStrategy">
-          <option value="replaceById">Replace by id (update existing, add new)</option>
-          <option value="appendNew">Append new only (ignore rows with existing id)</option>
-        </select>
-      </div>
-      <div class="actions">
-        <button class="btn-secondary" id="importCancel">Cancel</button>
-        <button class="btn" id="importCommit">Import</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- Update toast -->
-  <div class="toast" id="updateToast">
-    <span class="small">Update available</span>
-    <button class="btn" id="updateBtn">Refresh</button>
-  </div>
-
-  <script src="app.js"></script>
-</body>
-</html>
+    </form>
+    <div class="hint">Calories auto-calc from macros if blank (4/4/9 kcal per g). Mismatch warnings appear in the table.</div>
+  </section>
+  <section class="card">
+    <div class="small" id="roll7">7-day rollup...</div>
+    <div class="small" id="roll30" style="margin-top:4px">30-day rollup...</div>
+  </section>
+  <section class="card">
+    <table>
+      <thead><tr><th>Meal</th><th>Cal</th><th>P</th><th>C</th><th>F</th><th></th></tr></thead>
+      <tbody id="tbody"></tbody>
+    </table>
+  </section>
+</main>
+<!-- No footer -->
+<div class="toast" id="updateToast"><span class="small">Update available</span><button class="btn" id="updateBtn">Refresh</button></div>
+<script src="app.js"></script>
+</body></html>
